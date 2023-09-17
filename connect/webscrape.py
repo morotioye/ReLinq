@@ -18,8 +18,8 @@ from sms import SMSLine
 
 
 '''
-USERNAME="matthew.wong20031223@gmail.com"
-PASSWORD="2495960332"
+USERNAME="email"
+PASSWORD="password"
 
 email=driver.find_element_by_id("username")
 email.send_keys(USERNAME)
