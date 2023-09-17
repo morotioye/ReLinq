@@ -18,8 +18,8 @@ from sms import SMSLine
 
 
 '''
-USERNAME="email"
-PASSWORD="password"
+USERNAME="matthew.wong20031223@gmail.com"
+PASSWORD="2495960332"
 
 email=driver.find_element_by_id("username")
 email.send_keys(USERNAME)
@@ -38,6 +38,15 @@ def read_Mongo():
 
     collection = db['connections']
 
+    user=db["users"]
+
+    user_records=user.find() 
+
+    phone_list=[]
+
+    for i in user_records:
+        phone_list.append(i['phoneNumber'])
+
 
     all_records=collection.find()
 
@@ -46,7 +55,7 @@ def read_Mongo():
         record_dict[record['name']]=record['linkedInURL']
     #pd.read_json(all_records)
 
-    return record_dict
+    return record_dict,phone_list
     
 def Scrape_func(a, b, c):
     name = a[28:-1]
@@ -101,13 +110,15 @@ def Scrape_func(a, b, c):
 
 if __name__ == "__main__":
 
-    record_dict=read_Mongo()
+    record_dict,phone_list=read_Mongo()
+
+    print(len(record_dict))
 
     #print(recordd_dict['Moroti'])
   
     driver = webdriver.Chrome()
-    email = "matthew.wong20031223@gmail.com"
-    password = "2495960332"
+    email = "morottron@gmail.com"
+    password = "HopHacks2023"
     actions.login(driver, email, password)
 
     post_links = []
@@ -119,9 +130,9 @@ if __name__ == "__main__":
    
     
     line = SMSLine()
-    for texts in post_texts:
-        linkedin_update=texts
-        line.process_content(message_type='linkedin_update', linkedin_update=linkedin_update, sender_name="Mike", recipient_name="Emily", user_phone_number="+12403748332")
+    for i in range(len(post_texts)):
+        linkedin_update=post_texts[i]
+        line.process_content(message_type='linkedin_update', linkedin_update=linkedin_update, sender_name=(record_dict.keys)[i], recipient_name=post_names[i], user_phone_number='+19173743760')
 
 
     driver.quit()
