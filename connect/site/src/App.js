@@ -92,7 +92,7 @@ function App() {
   };
 
   return (
-    <Container>
+    <Container className={classes.container}>
       <Typography variant="h3" className={classes.title}>Relinq</Typography>
       <Typography variant="subtitle1">Reconnecting you with those that matter.</Typography>
       {isLoggedIn ? (
@@ -111,9 +111,12 @@ function App() {
           )}
           <div>
             {connections.map((connection, index) => (
-              <div key={index}>
+              <Paper elevation={3} className={classes.connectionCard} key={index}>
                 <Typography variant="h4">{connection.name}</Typography>
-              </div>
+                <Typography variant="body1">{connection.tags}</Typography>
+                <Typography variant="body2">{connection.description}</Typography>
+                <Typography variant="body2">{connection.linkedInURL}</Typography>
+              </Paper>
             ))}
           </div>
         </div>
