@@ -13,6 +13,7 @@ import pandas as pd
 from linkedin_scraper import Person, actions
 import pymongo
 from pymongo import MongoClient
+import requests
 
 
 '''
@@ -27,7 +28,25 @@ time.sleep(3)
 password.send_keys(Keys.RETURN)
 '''
 
+def read_Mongo():
+    mongo_uri = "mongodb+srv://connect1:connect1@seeoh.i2jzuxi.mongodb.net/?retryWrites=true&w=majority"
 
+    client = MongoClient(mongo_uri)
+
+    db = client['test']
+
+    collection = db['connections']
+
+
+    all_records=collection.find()
+
+    record_dict={}
+    for record in all_records:
+        record_dict[record['name']]=record['linkedInURL']
+    #pd.read_json(all_records)
+
+    return record_dict
+    
 def Scrape_func(a, b, c):
     name = a[28:-1]
     page = a
@@ -79,14 +98,11 @@ def Scrape_func(a, b, c):
 
 
 if __name__ == "__main__":
-    client = MongoClient('localhost', 27017)
-    mydb = client["test"]
-    connection=mydb['connections']
-    documents=connection.find({ "linkedInURL": "oneeight.linkedin.com" })
 
-    for i in documents:
-        print(i)
+    record_dict=read_Mongo()
 
+    print(record_dict['one eight'])
+  
     driver = webdriver.Chrome()
     email = "matthew.wong20031223@gmail.com"
     password = "2495960332"
