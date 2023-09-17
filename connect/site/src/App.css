@@ -1,136 +1,98 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+/* Reset some default browser styles */
+body, h1, h2, h3, p, button, input {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+}
 
-.App {
-  background-color: #4966a0; /* Matte gray background */
-  min-height: 100vh;
+/* Apply a background color */
+body {
+  background-color: #F5F5F5;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Container */
+.Container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 5rem;
 }
 
-.form-container,
-.login-container {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 33%;
-}
-
-.header {
+/* Header styles */
+.title {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  animation: fadeIn 1s ease-in-out;
 }
 
-.submit-button {
-  background-color: #48bb78; /* Green */
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+/* Subtitle */
+.subtitle1 {
+  font-size: 1rem;
+  color: #777;
+  margin-bottom: 2rem;
+  animation: fadeIn 1s ease-in-out 0.5s;
 }
 
-.submit-button:hover {
-  background-color: #38a169; /* Darker green */
+/* Paper styles */
+.paper {
+  background-color: #FFF;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.5s ease-in-out;
 }
 
-.confirmation-message {
+/* Button styles */
+.Button {
   margin-top: 1rem;
-  color: white;
-}
-
-.login-button,
-.signup-button {
-  background-color: #4299e1; /* Blue */
-  color: white;
+  background-color: #007BFF;
+  color: #FFF;
   padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 1rem;
-}
-
-.login-button:hover,
-.signup-button:hover {
-  background-color: #3182ce; /* Darker blue */
-}
-
-.action-link {
-  color: #4299e1; /* Blue */
-  cursor: pointer;
-  text-decoration: underline;
-  transition: color 0.3s ease;
-}
-
-.action-link:hover {
-  color: #3182ce; /* Darker blue */
-}
-
-.input-field {
-  width: 100%;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  border: 1px solid #ccc;
-  border-radius: 0.25rem;
-}
-
-.submit-button {
-  background-color: #48bb78; /* Green */
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-weight: bold;
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.submit-button:hover {
-  background-color: #38a169; /* Darker green */
-}
-.login-container,
-.signup {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.Button:hover {
+  background-color: #0056b3;
 }
 
-.login-button,
-.signup-button {
-  background-color: #4299e1; /* Blue */
-  color: white;
+/* Snackbar styles */
+.Snackbar {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #FFF;
   padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  border-radius: 4px;
+  animation: slideUp 0.5s ease-in-out;
 }
 
-.login-button:hover,
-.signup-button:hover {
-  background-color: #3182ce; /* Darker blue */
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.action-link {
-  color: #4299e1; /* Blue */
-  cursor: pointer;
-  text-decoration: underline;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-
-.action-link:hover {
-  color: #3182ce; /* Darker blue */
-}
-
-.site-title {
-  color: white;
-  font-weight: bold;
-  font-size: 2rem;
-  margin-top: 1rem;
-}
-
-

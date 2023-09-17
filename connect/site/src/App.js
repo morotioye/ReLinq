@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
 import { Button, TextField, Container, Typography, Snackbar, Paper, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
@@ -27,7 +28,6 @@ function App() {
   const [showAddConnectionForm, setShowAddConnectionForm] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
-    phoneNumber: '',
     name: '',
     tags: '',
     description: '',
@@ -84,9 +84,9 @@ function App() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const phoneRegex = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
+    const phoneRegex = /^\+\d{11}$/; // Matches a "+" followed by exactly 11 digits
     if (!phoneRegex.test(formData.phoneNumber)) {
-      setConfirmationMessage('Invalid phone number format. Use 123-456-7890');
+      setConfirmationMessage('Invalid phone number format. Use +12403748332');
       return;
     }
   };
@@ -102,7 +102,6 @@ function App() {
           </Button>
           {showAddConnection && (
             <form onSubmit={handleSubmit}>
-              <TextField label="Phone Number" variant="outlined" onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })} />
               <TextField label="Name" variant="outlined" onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
               <TextField label="Tags" variant="outlined" onChange={(e) => setFormData({ ...formData, tags: e.target.value })} />
               <TextField label="Description" variant="outlined" onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
@@ -114,7 +113,6 @@ function App() {
             {connections.map((connection, index) => (
               <div key={index}>
                 <Typography variant="h4">{connection.name}</Typography>
-                <Typography variant="body1">{connection.phoneNumber}</Typography>
               </div>
             ))}
           </div>
