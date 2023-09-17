@@ -26,8 +26,8 @@ app.post('/api/login', (req, res) => {
 });
 
 app.post('/api/addConnection', (req, res) => {
-  const { name, tags, description, linkedInURL } = req.body;
-  connections.push({ name, tags, description, linkedInURL });
+  const { name, tags, description, linkedInURL, senderName } = req.body;
+  connections.push({ name, tags, description, linkedInURL, senderName });
   res.status(201).send('Connection added');
 });
 

@@ -65,11 +65,14 @@ function App() {
       setConfirmationMessage('Login failed');
     }
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:3001/api/addConnection', formData);
+      const res = await axios.post('http://localhost:3001/api/addConnection', {
+        ...formData,
+        senderName: 'John Doe'  // Replace 'John Doe' with the actual sender's name
+      });
       if (res.status === 201) {
         setConfirmationMessage('Connection added successfully');
         setConnections([...connections, formData]);
@@ -79,6 +82,7 @@ function App() {
       setConfirmationMessage('Failed to add connection');
     }
   };
+  
 
   return (
     <Container>
