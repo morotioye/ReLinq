@@ -69,10 +69,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:3001/api/addConnection', {
-        ...formData,
-        senderName: 'John Doe'  // Replace 'John Doe' with the actual sender's name
-      });
+      const res = await axios.post('http://localhost:3001/api/addConnection', formData);
       if (res.status === 201) {
         setConfirmationMessage('Connection added successfully');
         setConnections([...connections, formData]);
