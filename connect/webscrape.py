@@ -14,7 +14,7 @@ from linkedin_scraper import Person, actions
 import pymongo
 from pymongo import MongoClient
 import requests
-import sms
+from sms import SMSLine
 
 
 '''
@@ -116,15 +116,12 @@ if __name__ == "__main__":
 
     for value in record_dict.values():
         Scrape_func(value,post_texts,post_names)
+   
+    
+    line = SMSLine()
+    for texts in post_texts:
+        linkedin_update=texts
+        line.process_content(message_type='linkedin_update', linkedin_update=linkedin_update, sender_name="Mike", recipient_name="Emily", user_phone_number="+12403748332")
 
-    '''
-    n = int(input("Enter the number of entries: "))
-    for i in range(n):
-        post_links.append(input("Enter the link: "))
-    for j in range(n):
-        Scrape_func(post_links[j], post_texts, post_names)
-    '''
-    for k in post_texts:
-        print(k)
 
     driver.quit()
