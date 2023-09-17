@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
 import { Button, TextField, Container, Typography, Snackbar, Paper, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
@@ -18,16 +17,12 @@ const useStyles = makeStyles({
 function App() {
   const classes = useStyles();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isNewUser, setIsNewUser] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showAddConnection, setShowAddConnection] = useState(false);
-  const [animateWelcome, setAnimateWelcome] = useState(false);
   const [loginData, setLoginData] = useState({ phoneNumber: '', password: '' });
   const [signupData, setSignupData] = useState({ phoneNumber: '', password: '' });
   const [connections, setConnections] = useState([]);
-  const [showAddConnectionForm, setShowAddConnectionForm] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
     name: '',
     tags: '',
     description: '',
@@ -47,52 +42,46 @@ function App() {
     fetchConnections();
   }, []);
 
-  useEffect(() => {
-    if (confirmationMessage) {
-      setTimeout(() => {
-        setConfirmationMessage('');
-      }, 4000);
+  const handleSignup = async () => {
+    try {
+      const res = await axios.post('http://localhost:3001/api/register', signupData);
+      if (res.status === 201) {
+        setIsLoggedIn(true);
+        setConfirmationMessage('Signed up successfully');
+      }
+    } catch (error) {
+      setConfirmationMessage('Signup failed');
     }
-  }, [confirmationMessage]);
+  };
 
   const handleLogin = async () => {
     try {
       const res = await axios.post('http://localhost:3001/api/login', loginData);
       if (res.status === 200) {
         setIsLoggedIn(true);
-        setIsNewUser(false);
+        setConfirmationMessage('Logged in successfully');
       }
     } catch (error) {
-      setIsNewUser(false);
       setConfirmationMessage('Login failed');
     }
   };
-  
-  const handleSignup = async () => {
-    try {
-      const res = await axios.post('http://localhost:3001/api/register', signupData);
-      if (res.status === 201) {
-        setIsLoggedIn(true);
-        setIsNewUser(true);
-        setAnimateWelcome(true);
-      }
-    } catch (error) {
-      setIsNewUser(false);
-      setConfirmationMessage('Signup failed');
-    }
-  };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const phoneRegex = /^\+\d{11}$/; // Matches a "+" followed by exactly 11 digits
-    if (!phoneRegex.test(formData.phoneNumber)) {
-      setConfirmationMessage('Invalid phone number format. Use +12403748332');
-      return;
+    try {
+      const res = await axios.post('http://localhost:3001/api/addConnection', formData);
+      if (res.status === 201) {
+        setConfirmationMessage('Connection added successfully');
+        setConnections([...connections, formData]);
+        setShowAddConnection(false);
+      }
+    } catch (error) {
+      setConfirmationMessage('Failed to add connection');
     }
   };
 
   return (
-    <Container className={classes.container}>
+    <Container>
       <Typography variant="h3" className={classes.title}>Relinq</Typography>
       <Typography variant="subtitle1">Reconnecting you with those that matter.</Typography>
       {isLoggedIn ? (
@@ -111,7 +100,7 @@ function App() {
           )}
           <div>
             {connections.map((connection, index) => (
-              <Paper elevation={3} className={classes.connectionCard} key={index}>
+              <Paper elevation={3} key={index}>
                 <Typography variant="h4">{connection.name}</Typography>
                 <Typography variant="body1">{connection.tags}</Typography>
                 <Typography variant="body2">{connection.description}</Typography>
