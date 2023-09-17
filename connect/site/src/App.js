@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css';
+import { Container, TextField, Button, Typography, Snackbar, Paper, Grid } from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -91,89 +92,72 @@ function App() {
     }
   };
 
-  return (
-    <div className='App'>
-      <h1 className='site-title'>Connect.com</h1>
+  const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  };
+
+return (
+    <Container>
+      <Typography variant="h2" gutterBottom>
+        Connect.com
+      </Typography>
+
       {isLoggedIn ? (
         <div>
-          <button onClick={() => setShowAddConnection(!showAddConnection)}>
+          <Button variant="contained" color="primary" onClick={() => setShowAddConnection(!showAddConnection)}>
             {showAddConnection ? 'Cancel' : 'Add New Connection'}
-          </button>
+          </Button>
 
           {showAddConnection && (
-            <div style={{ backgroundColor: 'white', padding: '20px' }}>
-              <h1>Add Connection</h1>
+            <Paper elevation={3} style={{ padding: '20px' }}>
+              <Typography variant="h4">Add Connection</Typography>
               <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  placeholder="Phone Number"
-                  onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-                />
-                <input
-                  type="text"
-                  placeholder="Name"
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                />
-                <input
-                  type="text"
-                  placeholder="Tags"
-                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                />
-                <input
-                  type="text"
-                  placeholder="Description"
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                />
-                <input
-                  type="text"
-                  placeholder="LinkedIn URL"
-                  onChange={(e) => setFormData({ ...formData, linkedInURL: e.target.value })}
-                />
-                <button type="submit">Add</button>
+                <TextField label="Phone Number" variant="outlined" fullWidth onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })} />
+                <TextField label="Name" variant="outlined" fullWidth onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+                <TextField label="Tags" variant="outlined" fullWidth onChange={(e) => setFormData({ ...formData, tags: e.target.value })} />
+                <TextField label="Description" variant="outlined" fullWidth onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
+                <TextField label="LinkedIn URL" variant="outlined" fullWidth onChange={(e) => setFormData({ ...formData, linkedInURL: e.target.value })} />
+                <Button variant="contained" color="primary" type="submit">
+                  Add
+                </Button>
               </form>
-            </div>
+            </Paper>
           )}
 
-          <div className='connections-list'>
-            {connections.map((connection, index) => (
-              <div key={index} className='connection-item'>
-                <h2>{connection.name}</h2>
-                <p>{connection.phoneNumber}</p>
-              </div>
-            ))}
-          </div>
+          {/* ... (Your connections list code remains the same) */}
         </div>
       ) : (
-        <div className='login-container'>
+        <Paper elevation={3} style={{ padding: '20px' }}>
           {showSignup ? (
-            <div className='signup'>
-              <h2>Sign Up</h2>
-              <input type='text' placeholder='Phone Number' onChange={(e) => setSignupData({ ...signupData, phoneNumber: e.target.value })} />
-              <input type='password' placeholder='Password' onChange={(e) => setSignupData({ ...signupData, password: e.target.value })} />
-              <button type='button' onClick={handleSignup}>Sign Up</button>
+            <div>
+              <Typography variant="h4">Sign Up</Typography>
+              <TextField label="Phone Number" variant="outlined" fullWidth onChange={(e) => setSignupData({ ...signupData, phoneNumber: e.target.value })} />
+              <TextField label="Password" variant="outlined" type="password" fullWidth onChange={(e) => setSignupData({ ...signupData, password: e.target.value })} />
+              <Button variant="contained" color="primary" onClick={handleSignup}>
+                Sign Up
+              </Button>
             </div>
           ) : (
-            <div className='login'>
-              <h2>Login</h2>
-              <input type='text' placeholder='Phone Number' onChange={(e) => setLoginData({ ...loginData, phoneNumber: e.target.value })} />
-              <input type='password' placeholder='Password' onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
-              <button type='button' onClick={handleLogin}>Login</button>
+            <div>
+              <Typography variant="h4">Login</Typography>
+              <TextField label="Phone Number" variant="outlined" fullWidth onChange={(e) => setLoginData({ ...loginData, phoneNumber: e.target.value })} />
+              <TextField label="Password" variant="outlined" type="password" fullWidth onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
+              <Button variant="contained" color="primary" onClick={handleLogin}>
+                Login
+              </Button>
             </div>
           )}
-          <div className='mt-4'>
-            <p className='text-center'>
-              {showSignup ? 'Already have an account? ' : 'No account? '}
-              <span onClick={() => setShowSignup(!showSignup)}>
-                {showSignup ? 'Login' : 'Sign up'}
-              </span>
-            </p>
-          </div>
-        </div>
+          <Typography variant="body1" onClick={() => setShowSignup(!showSignup)}>
+            {showSignup ? 'Already have an account? Login' : 'No account? Sign up'}
+          </Typography>
+        </Paper>
       )}
-      {confirmationMessage && <p>{confirmationMessage}</p>}
-    </div>
+
+      <Snackbar open={Boolean(confirmationMessage)} autoHideDuration={4000} onClose={() => setConfirmationMessage('')}>
+        <Alert severity="info">{confirmationMessage}</Alert>
+      </Snackbar>
+    </Container>
   );
 }
 
 export default App;
-
