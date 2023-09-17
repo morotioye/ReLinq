@@ -14,6 +14,7 @@ from linkedin_scraper import Person, actions
 import pymongo
 from pymongo import MongoClient
 import requests
+import sms
 
 
 '''
@@ -74,7 +75,7 @@ def Scrape_func(a, b, c):
         "li", {"class": "profile-creator-shared-feed-update__container"})
     print("Fetching data from account: " + name)
     iterations = 0
-    nos = int(input("Enter number of posts: "))
+    #nos = int(input("Enter number of posts: "))
     for container in containers:
 
         try:
@@ -88,10 +89,11 @@ def Scrape_func(a, b, c):
             iterations += 1
             print(iterations)
             
-
+            '''
             if(iterations == nos):
                 print("break")
                 break
+            '''
 
         except:
             pass
@@ -101,7 +103,7 @@ if __name__ == "__main__":
 
     record_dict=read_Mongo()
 
-    print(record_dict['one eight'])
+    #print(recordd_dict['Moroti'])
   
     driver = webdriver.Chrome()
     email = "matthew.wong20031223@gmail.com"
@@ -112,12 +114,16 @@ if __name__ == "__main__":
     post_texts = []
     post_names = []
 
+    for value in record_dict.values():
+        Scrape_func(value,post_texts,post_names)
+
+    '''
     n = int(input("Enter the number of entries: "))
     for i in range(n):
         post_links.append(input("Enter the link: "))
     for j in range(n):
         Scrape_func(post_links[j], post_texts, post_names)
-
+    '''
     for k in post_texts:
         print(k)
 
