@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, TextField, Button, Typography, Snackbar, Paper, Grid } from '@mui/material';
-import MuiAlert from '@mui/material/Alert';
+import { Button, TextField, Container, Typography, Snackbar } from '@mui/material';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -55,7 +54,7 @@ function App() {
       setConfirmationMessage('Login failed');
     }
   };
-
+  
   const handleSignup = async () => {
     try {
       const res = await axios.post('http://localhost:3001/api/register', signupData);
@@ -69,7 +68,7 @@ function App() {
       setConfirmationMessage('Signup failed');
     }
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const phoneRegex = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
@@ -78,30 +77,18 @@ function App() {
       return;
     }
     try {
-      await axios.post('http://localhost:3001/api/addConnection', formData);
-      setConfirmationMessage('Connection successfully added to the database!');
-      setFormData({
-        phoneNumber: '',
-        name: '',
-        tags: '',
-        description: '',
-        linkedInURL: ''
-      });
+      const res = await axios.post('http://localhost:3001/api/addConnection', formData);
+      if (res.status === 201) {
+        setConfirmationMessage('Connection added successfully');
+      }
     } catch (error) {
-      setConfirmationMessage('Failed to add connection. Please try again.');
+      setConfirmationMessage('Failed to add connection');
     }
   };
 
-  const Alert = (props) => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-  };
-
-return (
+  return (
     <Container>
-      <Typography variant="h2" gutterBottom>
-        Connect.com
-      </Typography>
-
+      <Typography variant="h1">Relinq</Typography>
       {isLoggedIn ? (
         <div>
           <Button variant="contained" color="primary" onClick={() => setShowAddConnection(!showAddConnection)}>
@@ -109,53 +96,48 @@ return (
           </Button>
 
           {showAddConnection && (
-            <Paper elevation={3} style={{ padding: '20px' }}>
-              <Typography variant="h4">Add Connection</Typography>
-              <form onSubmit={handleSubmit}>
-                <TextField label="Phone Number" variant="outlined" fullWidth onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })} />
-                <TextField label="Name" variant="outlined" fullWidth onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
-                <TextField label="Tags" variant="outlined" fullWidth onChange={(e) => setFormData({ ...formData, tags: e.target.value })} />
-                <TextField label="Description" variant="outlined" fullWidth onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
-                <TextField label="LinkedIn URL" variant="outlined" fullWidth onChange={(e) => setFormData({ ...formData, linkedInURL: e.target.value })} />
-                <Button variant="contained" color="primary" type="submit">
-                  Add
-                </Button>
-              </form>
-            </Paper>
+            <form onSubmit={handleSubmit}>
+              <TextField label="Phone Number" variant="outlined" onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })} />
+              <TextField label="Name" variant="outlined" onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+              <TextField label="Tags" variant="outlined" onChange={(e) => setFormData({ ...formData, tags: e.target.value })} />
+              <TextField label="Description" variant="outlined" onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
+              <TextField label="LinkedIn URL" variant="outlined" onChange={(e) => setFormData({ ...formData, linkedInURL: e.target.value })} />
+              <Button variant="contained" color="primary" type="submit">Add</Button>
+            </form>
           )}
 
-          {/* ... (Your connections list code remains the same) */}
+          <div>
+            {connections.map((connection, index) => (
+              <div key={index}>
+                <Typography variant="h2">{connection.name}</Typography>
+                <Typography variant="body1">{connection.phoneNumber}</Typography>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
-        <Paper elevation={3} style={{ padding: '20px' }}>
+        <div>
           {showSignup ? (
             <div>
-              <Typography variant="h4">Sign Up</Typography>
-              <TextField label="Phone Number" variant="outlined" fullWidth onChange={(e) => setSignupData({ ...signupData, phoneNumber: e.target.value })} />
-              <TextField label="Password" variant="outlined" type="password" fullWidth onChange={(e) => setSignupData({ ...signupData, password: e.target.value })} />
-              <Button variant="contained" color="primary" onClick={handleSignup}>
-                Sign Up
-              </Button>
+              <Typography variant="h2">Sign Up</Typography>
+              <TextField label="Phone Number" variant="outlined" onChange={(e) => setSignupData({ ...signupData, phoneNumber: e.target.value })} />
+              <TextField label="Password" variant="outlined" type="password" onChange={(e) => setSignupData({ ...signupData, password: e.target.value })} />
+              <Button variant="contained" color="primary" onClick={handleSignup}>Sign Up</Button>
             </div>
           ) : (
             <div>
-              <Typography variant="h4">Login</Typography>
-              <TextField label="Phone Number" variant="outlined" fullWidth onChange={(e) => setLoginData({ ...loginData, phoneNumber: e.target.value })} />
-              <TextField label="Password" variant="outlined" type="password" fullWidth onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
-              <Button variant="contained" color="primary" onClick={handleLogin}>
-                Login
-              </Button>
+              <Typography variant="h2">Login</Typography>
+              <TextField label="Phone Number" variant="outlined" onChange={(e) => setLoginData({ ...loginData, phoneNumber: e.target.value })} />
+              <TextField label="Password" variant="outlined" type="password" onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
+              <Button variant="contained" color="primary" onClick={handleLogin}>Login</Button>
             </div>
           )}
-          <Typography variant="body1" onClick={() => setShowSignup(!showSignup)}>
+          <Button variant="text" color="primary" onClick={() => setShowSignup(!showSignup)}>
             {showSignup ? 'Already have an account? Login' : 'No account? Sign up'}
-          </Typography>
-        </Paper>
+          </Button>
+        </div>
       )}
-
-      <Snackbar open={Boolean(confirmationMessage)} autoHideDuration={4000} onClose={() => setConfirmationMessage('')}>
-        <Alert severity="info">{confirmationMessage}</Alert>
-      </Snackbar>
+      <Snackbar open={Boolean(confirmationMessage)} autoHideDuration={4000} message={confirmationMessage} />
     </Container>
   );
 }
